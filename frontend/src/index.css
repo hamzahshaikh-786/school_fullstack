@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .table-row {
+    @apply transition-transform;
+  }
+  .table-row:hover {
+    @apply scale-[1.01] shadow-md bg-gray-50 cursor-pointer;
+  }
+}

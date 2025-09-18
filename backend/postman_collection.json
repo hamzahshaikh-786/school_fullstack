@@ -1,0 +1,278 @@
+{
+    "info": {
+        "name": "School Payments API",
+        "description": "Complete API collection for School Payments microservice",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{jwt_token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:4005",
+            "type": "string"
+        },
+        {
+            "key": "jwt_token",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Health Check",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/health",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "health"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Register User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"demo@example.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"school\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/register",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "register"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Login User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"demo@example.com\",\n  \"password\": \"Password123!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.collectionVariables.set('jwt_token', jsonData.token);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Payments",
+            "item": [
+                {
+                    "name": "Create Payment",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"school_id\": \"SCHOOL1\",\n  \"trustee_id\": \"TRUST1\",\n  \"student_info\": {\n    \"name\": \"John Doe\",\n    \"id\": \"STU001\",\n    \"email\": \"john@example.com\"\n  },\n  \"gateway_name\": \"PhonePe\",\n  \"order_amount\": 2500,\n  \"custom_order_id\": \"ORDER-20250917-001\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/create-payment",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "create-payment"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Webhooks",
+            "item": [
+                {
+                    "name": "Process Webhook (Flat)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"order_id\": \"ORDER-20250917-001\",\n  \"order_amount\": 2500,\n  \"transaction_amount\": 2500,\n  \"payment_mode\": \"upi\",\n  \"status\": \"success\",\n  \"bank_reference\": \"TXN123456789\",\n  \"payment_message\": \"Payment successful\",\n  \"payment_time\": \"2025-09-17T18:30:00Z\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/webhook",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "webhook"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Process Webhook (Order Info)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"order_info\": {\n    \"order_id\": \"ORDER-20250917-002\",\n    \"order_amount\": 3000,\n    \"transaction_amount\": 3000,\n    \"payment_mode\": \"card\",\n    \"status\": \"success\",\n    \"bank_reference\": \"TXN987654321\",\n    \"payment_message\": \"Payment successful\",\n    \"payment_time\": \"2025-09-17T18:35:00Z\"\n  },\n  \"payment_details\": {\n    \"card_last4\": \"1234\",\n    \"card_brand\": \"visa\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/webhook",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "webhook"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Transactions",
+            "item": [
+                {
+                    "name": "Get All Transactions",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/transactions?page=1&limit=10",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "transactions"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Transactions by School",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/transactions/school/SCHOOL1?page=1&limit=10",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "transactions",
+                                "school",
+                                "SCHOOL1"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Transaction Status",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/transaction-status/ORDER-20250917-001",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "transaction-status",
+                                "ORDER-20250917-001"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
