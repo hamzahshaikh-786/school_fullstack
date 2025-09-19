@@ -12,5 +12,5 @@ export default defineConfig({
   build: {
     outDir: 'dist', // Vercel expects build output in /dist
   },
-  base: './', // ensures correct asset paths
+  base: '/', // ensures correct asset paths
 })
