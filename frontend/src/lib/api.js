@@ -1,5 +1,5 @@
 // frontend/src/api.js
-export const API_URL = "https://school-backend-gv15.onrender.com";
+export const BASE_URL = "https://school-backend-gv15.onrender.com";
 // const BASE_URL = 'http://localhost:4005'
 
 
