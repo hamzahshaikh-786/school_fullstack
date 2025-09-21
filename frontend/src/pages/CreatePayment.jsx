@@ -51,27 +51,32 @@ export default function CreatePayment() {
     }
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        setLoading(true)
-        setError(null)
-        setSuccess(null)
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
+        setSuccess(null);
 
         try {
-            const data = await api.createPayment(formData)
-            setSuccess(`Payment created successfully! Order ID: ${data.order_id}`)
+            // Convert order_amount to a number
+            const payload = {
+                ...formData,
+                order_amount: parseFloat(formData.order_amount),
+            };
+            const data = await api.createPayment(payload);
+            setSuccess(`Payment created successfully! Order ID: ${data.order_id}`);
 
             // Show redirect URL
             if (data.redirect_url) {
                 setTimeout(() => {
-                    window.open(data.redirect_url, '_blank')
-                }, 2000)
+                    window.open(data.redirect_url, '_blank');
+                }, 2000);
             }
         } catch (err) {
-            setError(err.message)
+            setError(err.message);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 p-4">

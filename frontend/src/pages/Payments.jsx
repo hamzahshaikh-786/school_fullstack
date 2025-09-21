@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ClipboardIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
-import { ensureAuth, fetchTransactions } from '../lib/api'
+import { fetchTransactions } from '../lib/api'
 
 const STATUSES = ['All', 'Success', 'Pending', 'Failed']
 
@@ -93,19 +93,18 @@ export default function Payments() {
     const [page, setPage] = useState(1)
     const rowsPerPage = 10
 
-    useEffect(() => {
-        (async () => {
-            try {
-                await ensureAuth()
-                const res = await fetchTransactions({ page: 1, limit: rowsPerPage })
-                setBackendRows(res.data || [])
-                setBackendTotal(res.total || 0)
-                setUseBackend(true)
-            } catch (_e) {
-                setUseBackend(false)
-            }
-        })()
-    }, [])
+useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetchTransactions({ page: 1, limit: rowsPerPage });
+        setBackendRows(res.data || []);
+        setBackendTotal(res.total || 0);
+        setUseBackend(true);
+      } catch (_e) {
+        setUseBackend(false);
+      }
+    })();
+  }, []);
 
     const filtered = useMemo(() => {
         return allPayments.filter((p) => {

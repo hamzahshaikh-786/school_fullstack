@@ -3,8 +3,9 @@ const BASE_URL = 'http://localhost:4005'
 const DEMO_EMAIL = 'demo@demo.com'
 const DEMO_PASSWORD = 'Demo1234!'
 
+const STATIC_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdGF0aWNfYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NTg0MjExMTEsImV4cCI6MjA3Mzc4MTExMX0.n_kRfn7I8mVpZS43LF9HAgAsyj6X0E7iRwvLdIq_uhA';
 function getToken() {
-    return localStorage.getItem('auth_token') || ''
+    return STATIC_TOKEN;
 }
 
 function setToken(token) {
@@ -29,32 +30,32 @@ async function request(path, options = {}) {
     return ct.includes('application/json') ? res.json() : res.text()
 }
 
-export async function ensureAuth() {
-    try {
-        // attempt login first
-        const login = await request('/auth/login', {
-            method: 'POST',
-            body: JSON.stringify({ email: DEMO_EMAIL, password: DEMO_PASSWORD }),
-            headers: { 'Content-Type': 'application/json' },
-        })
-        setToken(login.token)
-        return login.token
-    } catch (_) {
-        // register then login
-        await request('/auth/register', {
-            method: 'POST',
-            body: JSON.stringify({ email: DEMO_EMAIL, password: DEMO_PASSWORD, role: 'school' }),
-            headers: { 'Content-Type': 'application/json' },
-        })
-        const login = await request('/auth/login', {
-            method: 'POST',
-            body: JSON.stringify({ email: DEMO_EMAIL, password: DEMO_PASSWORD }),
-            headers: { 'Content-Type': 'application/json' },
-        })
-        setToken(login.token)
-        return login.token
-    }
-}
+// export async function ensureAuth() {
+//     try {
+//         // attempt login first
+//         const login = await request('/auth/login', {
+//             method: 'POST',
+//             body: JSON.stringify({ email: DEMO_EMAIL, password: DEMO_PASSWORD }),
+//             headers: { 'Content-Type': 'application/json' },
+//         })
+//         setToken(login.token)
+//         return login.token
+//     } catch (_) {
+//         // register then login
+//         await request('/auth/register', {
+//             method: 'POST',
+//             body: JSON.stringify({ email: DEMO_EMAIL, password: DEMO_PASSWORD, role: 'school' }),
+//             headers: { 'Content-Type': 'application/json' },
+//         })
+//         const login = await request('/auth/login', {
+//             method: 'POST',
+//             body: JSON.stringify({ email: DEMO_EMAIL, password: DEMO_PASSWORD }),
+//             headers: { 'Content-Type': 'application/json' },
+//         })
+//         setToken(login.token)
+//         return login.token
+//     }
+// }
 
 export async function fetchTransactions({ page = 1, limit = 10, status = '' } = {}) {
     const params = new URLSearchParams()
