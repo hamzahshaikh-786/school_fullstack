@@ -65,12 +65,12 @@ export default function CreatePayment() {
             const data = await api.createPayment(payload);
             setSuccess(`Payment created successfully! Order ID: ${data.order_id}`);
 
-            // Show redirect URL
-            if (data.redirect_url) {
-                setTimeout(() => {
-                    window.open(data.redirect_url, '_blank');
-                }, 2000);
-            }
+            // // Show redirect URL
+            // if (data.redirect_url) {
+            //     setTimeout(() => {
+            //         window.open(data.redirect_url, '_blank');
+            //     }, 2000);
+            // }
         } catch (err) {
             setError(err.message);
         } finally {
