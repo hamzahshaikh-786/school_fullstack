@@ -71,11 +71,17 @@ export default function CreatePayment() {
             //         window.open(data.redirect_url, '_blank');
             //     }, 2000);
             // }
-        } catch (err) {
-            setError(err.message);
+            } catch (err) {
+            // Check if backend says payment already exists
+            if (err.message.includes('already exists')) {
+                setError('Payment with this Order ID already exists!');
+            } else {
+                setError(err.message);
+            }
         } finally {
             setLoading(false);
         }
+
     };
 
     return (
