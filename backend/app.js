@@ -35,9 +35,13 @@ export function createApp() {
     app.use(webhookRouter) // /webhook
 
     // Protected routes
-    app.use(authMiddleware)
+    // app.use(authMiddleware)
     app.use(paymentRouter)
     app.use(transactionsRouter)
+
+    app.get('/', (_req, res) => {
+        res.redirect('/transactions')
+    })
 
     // Not found handler
     app.use((req, res) => {
@@ -55,5 +59,3 @@ export function createApp() {
 
     return app
 }
-
-
