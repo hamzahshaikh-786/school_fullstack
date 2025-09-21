@@ -1,4 +1,7 @@
-const BASE_URL = 'http://localhost:4005'
+// frontend/src/api.js
+export const API_URL = "https://school-backend-gv15.onrender.com";
+// const BASE_URL = 'http://localhost:4005'
+
 
 const DEMO_EMAIL = 'demo@demo.com'
 const DEMO_PASSWORD = 'Demo1234!'
