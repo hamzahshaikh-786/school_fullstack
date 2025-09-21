@@ -24,6 +24,7 @@ async function request(path, options = {}) {
     const res = await fetch(`${API_URL}${path}`, {
         ...options,
         headers,
+        redirect:"manual",
     });
 
     if (!res.ok) {
@@ -40,7 +41,7 @@ export async function fetchTransactions({ page = 1, limit = 10, status = '' } = 
     params.set('page', String(page));
     params.set('limit', String(limit));
     if (status && status !== 'All') params.set('status', status.toLowerCase());
-    return request(`/transactions?${params.toString()}`);
+    return request(`/transactions?${    params.toString()}`);
 }
 
 export async function health() {
